@@ -11,6 +11,8 @@ struct ServerView: View {
     
     @State var isSensing = false
     
+    @State var promptASU = false
+    
     @State private var data: [String] = []
     @State private var newItem: String = ""
     
@@ -31,13 +33,14 @@ struct ServerView: View {
                     isSensing.toggle()
                 }
             }) {
-                Text(isSensing ? "Stop Streaming" : "Start Streaming")
+                Text(isSensing ? "Stop Sensing" : "Start Sensing")
             }
             .frame(width: 200, height: 60)
             .background(Color.pink)
             .foregroundColor(.white)
             .cornerRadius(10)
 //            TranscriptView()
+            Spacer()
         }
     }
     
