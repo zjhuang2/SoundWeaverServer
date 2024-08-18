@@ -16,7 +16,6 @@
 		E70A9C7F2C6D413D005808EA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = E70A9C7E2C6D413D005808EA /* FirebaseFirestore */; };
 		E70A9C812C6D4160005808EA /* DirectionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C802C6D4160005808EA /* DirectionButton.swift */; };
 		E70A9C832C6D4277005808EA /* ServerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C822C6D4277005808EA /* ServerView.swift */; };
-		E70A9C852C6D42E9005808EA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E70A9C842C6D42E9005808EA /* GoogleService-Info.plist */; };
 		E70A9C872C6D4322005808EA /* AudioSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C862C6D4322005808EA /* AudioSessionManager.swift */; };
 		E70A9C892C6D433B005808EA /* SpeechRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C882C6D433B005808EA /* SpeechRecognizer.swift */; };
 		E70A9C8B2C6D436A005808EA /* AudioClassifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C8A2C6D436A005808EA /* AudioClassifier.swift */; };
@@ -24,6 +23,13 @@
 		E70A9C8F2C6D43B7005808EA /* ClassificationResultsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C8E2C6D43B7005808EA /* ClassificationResultsObject.swift */; };
 		E70A9C912C6D43C4005808EA /* SoundIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C902C6D43C4005808EA /* SoundIdentifier.swift */; };
 		E70A9C932C6D43D6005808EA /* DetectionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C922C6D43D6005808EA /* DetectionState.swift */; };
+		E70A9C9E2C6E7B6D005808EA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E70A9C9D2C6E7B6C005808EA /* GoogleService-Info.plist */; };
+		E70A9CA02C6EA3E8005808EA /* SoundLevelMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9C9F2C6EA3E8005808EA /* SoundLevelMonitor.swift */; };
+		E70A9CA22C700226005808EA /* TaskConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA12C700226005808EA /* TaskConfigView.swift */; };
+		E70A9CA42C712C22005808EA /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA32C712C22005808EA /* TaskItem.swift */; };
+		E70A9CA62C71366E005808EA /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA52C71366E005808EA /* FireStoreManager.swift */; };
+		E70A9CA82C713AD8005808EA /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA72C713AD8005808EA /* TaskDetailView.swift */; };
+		E70A9CAA2C72464D005808EA /* TaskControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA92C72464D005808EA /* TaskControlView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +41,6 @@
 		E70A9C792C6D404D005808EA /* DirectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionView.swift; sourceTree = "<group>"; };
 		E70A9C802C6D4160005808EA /* DirectionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionButton.swift; sourceTree = "<group>"; };
 		E70A9C822C6D4277005808EA /* ServerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerView.swift; sourceTree = "<group>"; };
-		E70A9C842C6D42E9005808EA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E70A9C862C6D4322005808EA /* AudioSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionManager.swift; sourceTree = "<group>"; };
 		E70A9C882C6D433B005808EA /* SpeechRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognizer.swift; sourceTree = "<group>"; };
 		E70A9C8A2C6D436A005808EA /* AudioClassifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioClassifier.swift; sourceTree = "<group>"; };
@@ -43,6 +48,13 @@
 		E70A9C8E2C6D43B7005808EA /* ClassificationResultsObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassificationResultsObject.swift; sourceTree = "<group>"; };
 		E70A9C902C6D43C4005808EA /* SoundIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundIdentifier.swift; sourceTree = "<group>"; };
 		E70A9C922C6D43D6005808EA /* DetectionState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectionState.swift; sourceTree = "<group>"; };
+		E70A9C9D2C6E7B6C005808EA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E70A9C9F2C6EA3E8005808EA /* SoundLevelMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundLevelMonitor.swift; sourceTree = "<group>"; };
+		E70A9CA12C700226005808EA /* TaskConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskConfigView.swift; sourceTree = "<group>"; };
+		E70A9CA32C712C22005808EA /* TaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItem.swift; sourceTree = "<group>"; };
+		E70A9CA52C71366E005808EA /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
+		E70A9CA72C713AD8005808EA /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
+		E70A9CA92C72464D005808EA /* TaskControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskControlView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +89,7 @@
 		E70A9C672C6D4014005808EA /* SoundWeaverServer */ = {
 			isa = PBXGroup;
 			children = (
-				E70A9C842C6D42E9005808EA /* GoogleService-Info.plist */,
+				E70A9C9D2C6E7B6C005808EA /* GoogleService-Info.plist */,
 				E70A9C782C6D4032005808EA /* Server */,
 				E70A9C772C6D4029005808EA /* Helper */,
 				E70A9C762C6D4025005808EA /* Views */,
@@ -101,7 +113,10 @@
 			isa = PBXGroup;
 			children = (
 				E70A9C802C6D4160005808EA /* DirectionButton.swift */,
+				E70A9CA12C700226005808EA /* TaskConfigView.swift */,
+				E70A9CA72C713AD8005808EA /* TaskDetailView.swift */,
 				E70A9C792C6D404D005808EA /* DirectionView.swift */,
+				E70A9CA92C72464D005808EA /* TaskControlView.swift */,
 				E70A9C822C6D4277005808EA /* ServerView.swift */,
 			);
 			path = Views;
@@ -113,6 +128,7 @@
 				E70A9C8E2C6D43B7005808EA /* ClassificationResultsObject.swift */,
 				E70A9C902C6D43C4005808EA /* SoundIdentifier.swift */,
 				E70A9C922C6D43D6005808EA /* DetectionState.swift */,
+				E70A9CA32C712C22005808EA /* TaskItem.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -124,6 +140,8 @@
 				E70A9C882C6D433B005808EA /* SpeechRecognizer.swift */,
 				E70A9C8A2C6D436A005808EA /* AudioClassifier.swift */,
 				E70A9C8C2C6D4382005808EA /* AudioClassificationManager.swift */,
+				E70A9C9F2C6EA3E8005808EA /* SoundLevelMonitor.swift */,
+				E70A9CA52C71366E005808EA /* FireStoreManager.swift */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -195,7 +213,7 @@
 			files = (
 				E70A9C702C6D4015005808EA /* Preview Assets.xcassets in Resources */,
 				E70A9C6D2C6D4015005808EA /* Assets.xcassets in Resources */,
-				E70A9C852C6D42E9005808EA /* GoogleService-Info.plist in Resources */,
+				E70A9C9E2C6E7B6D005808EA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,17 +225,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				E70A9C912C6D43C4005808EA /* SoundIdentifier.swift in Sources */,
+				E70A9CA42C712C22005808EA /* TaskItem.swift in Sources */,
+				E70A9CA22C700226005808EA /* TaskConfigView.swift in Sources */,
 				E70A9C892C6D433B005808EA /* SpeechRecognizer.swift in Sources */,
 				E70A9C7A2C6D404D005808EA /* DirectionView.swift in Sources */,
 				E70A9C872C6D4322005808EA /* AudioSessionManager.swift in Sources */,
 				E70A9C8D2C6D4382005808EA /* AudioClassificationManager.swift in Sources */,
+				E70A9CAA2C72464D005808EA /* TaskControlView.swift in Sources */,
 				E70A9C812C6D4160005808EA /* DirectionButton.swift in Sources */,
+				E70A9CA02C6EA3E8005808EA /* SoundLevelMonitor.swift in Sources */,
 				E70A9C8F2C6D43B7005808EA /* ClassificationResultsObject.swift in Sources */,
 				E70A9C832C6D4277005808EA /* ServerView.swift in Sources */,
 				E70A9C6B2C6D4014005808EA /* ContentView.swift in Sources */,
 				E70A9C692C6D4014005808EA /* SoundWeaverServerApp.swift in Sources */,
 				E70A9C8B2C6D436A005808EA /* AudioClassifier.swift in Sources */,
 				E70A9C932C6D43D6005808EA /* DetectionState.swift in Sources */,
+				E70A9CA82C713AD8005808EA /* TaskDetailView.swift in Sources */,
+				E70A9CA62C71366E005808EA /* FireStoreManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -351,6 +375,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SoundWeaverServer/Preview Content\"";
+				DEVELOPMENT_TEAM = ST54V5XQY4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We will need access to the microphone.";
@@ -381,6 +406,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"SoundWeaverServer/Preview Content\"";
+				DEVELOPMENT_TEAM = ST54V5XQY4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We will need access to the microphone.";

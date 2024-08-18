@@ -26,10 +26,12 @@ struct ServerView: View {
                 if !isSensing {
                     classificationState.restartDetection(config: classificationConfig)
                     startTranscribing()
+                    SoundLevelMonitor.shared.startMonitoring()
                     isSensing.toggle()
                 } else {
                     AudioClassifier.singleton.stopSoundClassification()
                     stopTranscribing()
+                    SoundLevelMonitor.shared.stopMonitoring()
                     isSensing.toggle()
                 }
             }) {

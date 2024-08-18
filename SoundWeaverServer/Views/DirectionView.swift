@@ -22,7 +22,9 @@ struct DirectionView: View {
     
     var body: some View {
         VStack {
-            Text("Directional Information").font(.title)
+            Text("Directional Controls")
+                .font(.largeTitle)
+                .fontWeight(.bold)
             VStack {
                 HStack {
                     DirectionButton(direction: "Front-left",

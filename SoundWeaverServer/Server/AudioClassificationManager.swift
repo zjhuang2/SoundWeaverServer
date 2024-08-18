@@ -8,8 +8,14 @@
 import Foundation
 import SoundAnalysis
 import Combine
+import Firebase
+import FirebaseDatabase
 
 @Observable class AudioClassificationState {
+    
+    // Set up Firebase Database connection
+    private var databaseRef: DatabaseReference!
+    
     /// A cancellable object for the lifetime of the sound classification.
     ///
     /// While the app retains this cancellable object, a sound classification task continues to run until it
@@ -22,7 +28,11 @@ import Combine
     /// A list of mappings between sounds and current detection states.
     ///
     /// The app sorts this list to reflect the order in which the app displays them.
-    var detectionStates: [(SoundIdentifier, DetectionState)] = []
+    var detectionStates: [(SoundIdentifier, DetectionState)] = [] {
+        didSet {
+            updateValueOnServer()
+        }
+    }
     
     /// Indicates whether a sound classification is active.
     ///
@@ -85,6 +95,15 @@ import Combine
         return oldStates.map {(key, value) in
             (key, DetectionState(advancedFrom: value, currentConfidence: confidenceLabel(key)))
         }
+    }
+    
+    /// Update the detection states on the real-time database.
+    private func updateValueOnServer() {
+        let ref = Database.database().reference()
+        let detectedSounds = self.detectionStates
+            .filter {$1.isDetected}
+            .map { [$0.labelName : $1.currentConfidence] }
+        ref.child("detectionStates").setValue(["value": detectedSounds])
     }
 }
 
