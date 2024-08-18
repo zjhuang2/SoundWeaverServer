@@ -36,10 +36,18 @@ struct ContentView: View {
     var body: some View {
         VStack {
             TabView {
-                DirectionView()
+                TaskConfigView()
                     .tabItem {
-                        Label("Woz Remote", systemImage: "av.remote")
+                        Label("Action Tasks", systemImage: "bolt.fill")
                     }
+                
+                VStack {
+                    DirectionView()
+                    TaskControlView()
+                }
+                .tabItem {
+                    Label("Woz Remote", systemImage: "av.remote")
+                }
                 
                 ServerView()
                     .tabItem {
