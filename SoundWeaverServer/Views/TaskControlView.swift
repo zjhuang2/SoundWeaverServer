@@ -45,7 +45,8 @@ struct TaskControlView: View {
             }
             .onChange(of: selectedTask) {
                 if let task = selectedTask {
-                    firestoreManager.sendTaskToRealtimeDatabase(task: task)
+                    firestoreManager.sendTaskNameToRealTimeDatabase(task: task)
+                    firestoreManager.sendCurrentActionModeSoundsToRealTimeDatabase(task: task)
                     firestoreManager.fetchActiveStates(task: task) { states in
                         activeStates = states
                     }

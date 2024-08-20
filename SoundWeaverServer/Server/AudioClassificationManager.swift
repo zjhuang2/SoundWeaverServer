@@ -102,13 +102,35 @@ import FirebaseDatabase
         let ref = Database.database().reference()
         let detectedSounds = self.detectionStates
             .filter {$1.isDetected}
-            .map { [$0.labelName : $1.currentConfidence] }
-        ref.child("detectionStates").setValue(["value": detectedSounds])
+            .map { DetectedSound(labelName: $0.labelName, confidence: $1.currentConfidence) }
+        
+        var updatedDetectionArray: [[String: Any]] = []
+        
+        for sound in detectedSounds {
+            updatedDetectionArray.append(sound.toDictionary())
+        }
+        
+        ref.child("detectionStates").setValue(updatedDetectionArray)
+    }
+}
+
+struct DetectedSound: Codable {
+    var labelName: String
+    var confidence: Double
+}
+
+extension DetectedSound {
+    func toDictionary() -> [String: Any] {
+        return [
+            "labelName": labelName,
+            "confidence": confidence
+        ]
     }
 }
 
 /// Contains customizable settings that control app behavior.
 struct AudioClassificationConfiguration {
+    
     /// Indicates the amount of audio, in seconds, that informs a prediction.
     var inferenceWindowSize = Double(1.5)
 
@@ -120,8 +142,10 @@ struct AudioClassificationConfiguration {
     /// the audio that the previous window uses.
     var overlapFactor = Double(0.9)
 
-    /// A list of sounds to identify from system audio input.
-    var monitoredSounds = try! listAllValidSoundIdentifiers()
+    /// A list of sounds to identify from system audio input - SUBJECT TO CHANGE BASED ON CONTEXTS.
+    var monitoredSounds = try! listExperiementalSoundIdentifiers()
+    
+    var emergencySounds = try! listEmergencySoundIdentifiers()
 
     /// Retrieves a list of the sounds the system can identify.
     ///
@@ -129,6 +153,26 @@ struct AudioClassificationConfiguration {
     ///   classification emits, and names suitable for displaying to the user.
     static func listAllValidSoundIdentifiers() throws -> Set<SoundIdentifier> {
         let labels = try AudioClassifier.getAllPossibleLabels()
+        return Set<SoundIdentifier>(labels.map {
+            SoundIdentifier(labelName: $0)
+        })
+    }
+    
+    // A list of sounds used for the SoundWeaver Field Evaluation Experiments
+    static func listExperiementalSoundIdentifiers() throws -> Set<SoundIdentifier> {
+        let experimentalLabels = ["speech", "shout", "yell", "screaming", "whispering", "laughter", "baby_laughter", "giggling", "crying_sobbing", "baby_crying", "sigh", "singing", "cough", "sneeze", "finger_snapping",
+                      "clapping", "cheering", "applause", "crowd", "dog", "dog_bark", "dog_howl", "cat", "cat_purr", "cat_meow", "bird", "music", "bell", "bicycle_bell", "chime", "wind_rustling_leaves", "thunder", "water", "rain", "stream_burbling", "waterfall", "fire", "fire_crackle", "car_horn", "truck", "emergency_vehicle", "police_siren", "ambulance_siren", "fire_engine_siren", "motorcycle", "subway_metro", "helicopter", "bicycle", "engine", "lawn_mower", "chainsaw", "door", "door_bell", "door_sliding", "door_slam", "knock", "tap", "squeak", "chopping_food", "frying_food", "cutlery_silverware", "microwave_oven", "blender", "water_tap_faucet", "hair_dryer", "vaccum_cleaner", "typing", "telephone", "telephone_bell_ringing", "ringtone", "alarm_clock", "siren", "civil_defense_siren", "smoke_detector", "mechanical_fan", "printer", "power_tool", "drill", "gunshot_gunfire", "fireworks", "boom", "glass_clink", "glass_breaking", "liquid_splashing", "liquid_dripping", "liquid_trickle_dribble", "liquid_sloshing", "boiling", "underwater_bubbling", "whoosh_swoosh_swish", "thump_thud", "slap_smack", "crushing", "crumpling_crinkling", "tearing", "beep", "click"]
+        
+        let labels = try AudioClassifier.getAllPossibleLabels().filter { experimentalLabels.contains($0) }
+        return Set<SoundIdentifier>(labels.map {
+            SoundIdentifier(labelName: $0)
+        })
+    }
+    
+    // A list of sounds that is emergent and should override the modes.
+    static func listEmergencySoundIdentifiers() throws -> Set<SoundIdentifier> {
+        let emergencyLabels = ["smoke_detector", "gunshot_gunfire", "emergency_vehicle", "police_siren", "ambulance_siren"]
+        let labels = try AudioClassifier.getAllPossibleLabels().filter { emergencyLabels.contains($0) }
         return Set<SoundIdentifier>(labels.map {
             SoundIdentifier(labelName: $0)
         })

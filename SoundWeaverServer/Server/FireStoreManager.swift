@@ -80,27 +80,47 @@ import FirebaseDatabase
         try? db.collection("taskConfig").document(documentId).setData(from: updatedTask)
     }
     
-    /// Real-time database connections.
-    func sendTaskToRealtimeDatabase(task: TaskItem) {
-        guard let taskId = task.id else { return }
-        let taskData: [String: Any] = [
-            "taskName": task.taskLabel,
-            "sounds": task.soundItems.map { soundItem in
-                [
-                    "labelName": soundItem.labelName,
-                    "pinned": soundItem.pinned,
-                    "activeState": false
-                ]
-            }
-        ]
-        
-        realtimeDB.child("activeTask/\(taskId)").setValue(taskData)
+    func sendTaskNameToRealTimeDatabase(task: TaskItem) {
+        realtimeDB.child("currentTaskName").setValue(task.taskLabel)
     }
     
+    func sendCurrentActionModeSoundsToRealTimeDatabase(task: TaskItem) {
+        var actionModeSoundData: [[String: Any]] = []
+        for sound in task.soundItems {
+            let soundDict: [String: Any] = [
+                "labelName": sound.labelName,
+                "pinned": sound.pinned,
+                "activeState": false
+            ]
+            actionModeSoundData.append(soundDict)
+        }
+        // An array of dictionaries
+        realtimeDB.child("currentActionModeSounds").setValue(actionModeSoundData)
+    }
+    
+//    /// Real-time database connections.
+//    func sendTaskToRealtimeDatabase(task: TaskItem) {
+//        
+//        guard let taskId = task.id else { return }
+//        
+//        let taskData: [String: Any] = [
+//            "taskName": task.taskLabel,
+//            "sounds": task.soundItems.map { soundItem in
+//                [
+//                    "labelName": soundItem.labelName,
+//                    "pinned": soundItem.pinned,
+//                    "activeState": false
+//                ]
+//            }
+//        ]
+//        
+//        realtimeDB.child("activeTask/\(taskId)").setValue(taskData)
+//    }
+    
     func toggleSoundActiveState(task: TaskItem, soundItem: SoundItem) {
-        guard let taskId = task.id else { return }
+//        guard let taskId = task.id else { return }
         
-        let soundItemsRef = realtimeDB.child("activeTask/\(taskId)/sounds")
+        let soundItemsRef = realtimeDB.child("currentActionModeSounds")
         
         soundItemsRef.observeSingleEvent(of: .value, with: { snapshot in
             guard var sounds = snapshot.value as? [[String: Any]] else { return }
@@ -116,9 +136,9 @@ import FirebaseDatabase
     }
     
     func fetchActiveStates(task: TaskItem, completion: @escaping ([String: Bool]) -> Void) {
-        guard let taskId = task.id else { return }
+//        guard let taskId = task.id else { return }
         
-        let soundRef = realtimeDB.child("activeTask/\(taskId)/sounds")
+        let soundRef = realtimeDB.child("currentActionModeSounds")
         
         soundRef.observe(.value) { snapshot in
             guard let sounds = snapshot.value as? [[String: Any]] else {
