@@ -11,7 +11,10 @@ import FirebaseFirestore
 import FirebaseDatabase
 
 @Observable class FireStoreManager {
+    
     var tasks: [TaskItem] = []
+    
+    var spikeDetected: Bool = false
     
     private var db = Firestore.firestore()
     private var realtimeDB = Database.database().reference()
@@ -19,6 +22,8 @@ import FirebaseDatabase
     init() {
         fetchTasks()
     }
+    
+
     
     func fetchTasks() {
         db.collection("taskConfig").addSnapshotListener { (querySnapshot, error) in

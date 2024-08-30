@@ -22,11 +22,13 @@ import FirebaseDatabase
     // Real Time DB reference
     let databaseRef = Database.database().reference()
     
-    var transcriptText: String = "Go ahead, I am listening."
+    var transcriptText: String = ""
 //    var isRecording: Bool = false
     
     // Just an indicator for checking microphone access.
     var hasMicrophoneAccess = false
+    
+    private var timer: Timer? // debounce timer for clearing out captions.
     
     public func startTranscribing() {
         SFSpeechRecognizer.requestAuthorization { authStatus in
@@ -71,12 +73,20 @@ import FirebaseDatabase
                 if let result = result {
                     // Update the recognizedText
                     let recognizedText = result.bestTranscription.formattedString
-                    let lines = recognizedText.split(separator: "\n")
-                    let lastTwoLines = lines.suffix(2).joined(separator: "\n")
-                    self.transcriptText = lastTwoLines
+                    
+                    // Whole Transcript
+                    self.transcriptText = recognizedText
+                    self.databaseRef.child("currentTranscript").setValue(recognizedText)
+                    self.resetTimer()
+                    
+                    let lines = self.splitTextForCaptions(recognizedText, maxLineLength: 50, maxLines: 2)
+                    
+//                    let lines = recognizedText.split(separator: "\n")
+//                    let lastTwoLines = lines.suffix(2).joined(separator: "\n")
+//                    self.transcriptText = lastTwoLines
                     
                     // Upload to RealTimeDB
-                    self.databaseRef.child("transcript").setValue(["text": lastTwoLines])
+                    self.databaseRef.child("captionLines").setValue(lines)
                     
                 } else if let error = error {
                     self.transcriptText = "Recognition stopped: \(error.localizedDescription)"
@@ -93,7 +103,7 @@ import FirebaseDatabase
             
             // Configure the microphone input
             let recordingFormat = inputNode.outputFormat(forBus: 0)
-            inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer, when) in
+            inputNode.installTap(onBus: 0, bufferSize: 512, format: recordingFormat) { (buffer, when) in
                 self.recognitionRequest?.append(buffer)
             }
             
@@ -110,4 +120,112 @@ import FirebaseDatabase
         recognitionRequest?.endAudio()
         recognitionTask?.cancel()
     }
+    
+    private func resetTimer() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+            self.databaseRef.child("currentTranscript").setValue("")
+        }
+    }
+    
+    func splitTextForCaptions(_ text: String, maxLineLength: Int = 42, maxLines: Int = 2) -> [String] {
+        let words = text.split(separator: " ")
+        
+        var lines: [String] = []
+//        var firstLine = ""
+//        var secondLine = ""
+        var currentLine = ""
+        
+        // Loop through the words to construct lines of text
+        for word in words {
+            if currentLine.count + word.count + 1 <= maxLineLength {
+                currentLine += word + " "
+            } else {
+                lines.append(currentLine.trimmingCharacters(in: .whitespaces))
+                currentLine = word + " "
+            }
+        }
+        
+        // Append the last line if not empty
+        if !currentLine.isEmpty {
+            lines.append(currentLine.trimmingCharacters(in: .whitespaces))
+        }
+        
+        // Keep only the last two lines
+        if lines.count > 2 {
+            lines = Array(lines.suffix(2))
+        }
+        
+//        for word in words {
+//            if currentLine.count + word.count + 1 <= maxLineLength {
+//                currentLine += word + " "
+//            } else if firstLine.isEmpty {
+//                firstLine = currentLine.trimmingCharacters(in: .whitespaces)
+//                currentLine = word + " "
+//            } else {
+//                secondLine = currentLine.trimmingCharacters(in: .whitespaces)
+//                break
+//            }
+//        }
+//        
+//        // If new text comes in, keep only the latest two lines
+//        if !secondLine.isEmpty {
+//            firstLine = secondLine
+//            secondLine = currentLine.trimmingCharacters(in: .whitespaces)
+//        } else if firstLine.isEmpty {
+//            firstLine = currentLine.trimmingCharacters(in: .whitespaces)
+//        } else {
+//            secondLine = currentLine.trimmingCharacters(in: .whitespaces)
+//        }
+        
+//        for word in words {
+//            if (currentLine + " " + word).count <= maxLineLength {
+//                currentLine += (currentLine.isEmpty ? "" : " ") + word
+//            } else {
+//                captionSegments.append(currentLine)
+//                currentLine = String(word)
+//                
+//                if captionSegments.count == maxLines { break }
+//            }
+//        }
+//        
+//        if !currentLine.isEmpty && captionSegments.count < maxLines {
+//            captionSegments.append(currentLine)
+//        }
+        
+        return lines
+    }
+    
+//    func splitTextForCaptions(_ text: String, maxLineLength: Int, maxLines: Int = 2) -> [String] {
+//        let words = text.split(separator: " ").map(String.init)
+//        var currentLine = ""
+//        var captionSegments: [String] = []
+//        var lineCount = 0
+//        
+//        for word in words {
+//            if currentLine.count + word.count + 1 <= maxLineLength {
+//                if currentLine.isEmpty {
+//                    currentLine = word + " "
+//                } else {
+//                    currentLine += " \(word) "
+//                }
+//            } else {
+//                captionSegments.append(currentLine)
+//                lineCount += 1
+//                currentLine = word + " "
+//
+//                if lineCount == maxLines - 1 {
+//                    captionSegments.append(currentLine)
+//                    currentLine = ""
+//                    lineCount = 0
+//                }
+//            }
+//        }
+//        
+//        if !currentLine.isEmpty {
+//            captionSegments.append(currentLine)
+//        }
+//        
+//        return captionSegments
+//    }
 }
