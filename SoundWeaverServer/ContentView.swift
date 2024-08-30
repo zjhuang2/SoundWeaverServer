@@ -53,10 +53,16 @@ struct ContentView: View {
                     .tabItem {
                         Label("Server Controls", systemImage: "server.rack")
                     }
+                
+//                AcousticSceneView()
+//                    .tabItem {
+//                        Label("ASU", systemImage: "mountain.2.fill")
+//                    }
             }
         }
         .onAppear {
             AudioSessionManager.shared
+            AcousticSceneDescriber.shared
         }
     }
 }

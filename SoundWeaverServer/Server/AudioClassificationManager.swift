@@ -14,7 +14,7 @@ import FirebaseDatabase
 @Observable class AudioClassificationState {
     
     // Set up Firebase Database connection
-    private var databaseRef: DatabaseReference!
+    var ref = Database.database().reference()
     
     /// A cancellable object for the lifetime of the sound classification.
     ///
@@ -25,12 +25,19 @@ import FirebaseDatabase
     // The config that governs sound classification task.
     private var classificationConfig = AudioClassificationConfiguration()
     
+    let emergencySoundsLabel = ["siren", "civil_defense_siren", "smoke_detector", "gunshot_gunfire", "emergency_vehicle", "police_siren", "ambulance_siren", "fire_engine_siren"]
+    
+    var EMDetectedLocal: Bool = false
+//    var emergencyDetectionCount = 0
+    var debounceTimer: Timer?
+    
     /// A list of mappings between sounds and current detection states.
     ///
     /// The app sorts this list to reflect the order in which the app displays them.
     var detectionStates: [(SoundIdentifier, DetectionState)] = [] {
         didSet {
             updateValueOnServer()
+            setEMDetectionOnServer()
         }
     }
     
@@ -97,6 +104,20 @@ import FirebaseDatabase
         }
     }
     
+    // Update the Emergency Detection on Server
+    private func setEMDetectionOnServer() {
+        let ref = Database.database().reference()
+        ref.child("emergencyDetected").setValue(EMDetectedLocal)
+    }
+
+//    // Check locally if the current detectionState contains emergency sounds.
+//    private func checkEmergencySoundDetection() {
+//        let containsEmergencySounds = detectionStates.contains { tuple in
+//            emergencySoundsLabel.contains(tuple.0.labelName)
+//        }
+//        self.EMDetectedLocal = containsEmergencySounds
+//    }
+    
     /// Update the detection states on the real-time database.
     private func updateValueOnServer() {
         let ref = Database.database().reference()
@@ -110,7 +131,36 @@ import FirebaseDatabase
             updatedDetectionArray.append(sound.toDictionary())
         }
         
-        ref.child("detectionStates").setValue(updatedDetectionArray)
+        // Check for emergency sounds locally
+        let containsEmergencySound = updatedDetectionArray.contains { dict in
+            if let labelName = dict["labelName"] as? String {
+                return emergencySoundsLabel.contains(labelName)
+            }
+            return false
+        }
+        
+        if containsEmergencySound {
+            if self.EMDetectedLocal == true {
+                startDebounceTimer()
+            } else {
+                self.EMDetectedLocal = true
+                startDebounceTimer()
+            }
+        }
+        
+        // Update the detectionState on Server
+        if updatedDetectionArray.isEmpty {
+            ref.child("detectionStates").setValue([["placeholder": true]])
+        } else {
+            ref.child("detectionStates").setValue(updatedDetectionArray)
+        }
+    }
+    
+    private func startDebounceTimer() {
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { _ in
+            self.EMDetectedLocal = false
+        }
     }
 }
 
@@ -161,7 +211,7 @@ struct AudioClassificationConfiguration {
     // A list of sounds used for the SoundWeaver Field Evaluation Experiments
     static func listExperiementalSoundIdentifiers() throws -> Set<SoundIdentifier> {
         let experimentalLabels = ["speech", "shout", "yell", "screaming", "whispering", "laughter", "baby_laughter", "giggling", "crying_sobbing", "baby_crying", "sigh", "singing", "cough", "sneeze", "finger_snapping",
-                      "clapping", "cheering", "applause", "crowd", "dog", "dog_bark", "dog_howl", "cat", "cat_purr", "cat_meow", "bird", "music", "bell", "bicycle_bell", "chime", "wind_rustling_leaves", "thunder", "water", "rain", "stream_burbling", "waterfall", "fire", "fire_crackle", "car_horn", "truck", "emergency_vehicle", "police_siren", "ambulance_siren", "fire_engine_siren", "motorcycle", "subway_metro", "helicopter", "bicycle", "engine", "lawn_mower", "chainsaw", "door", "door_bell", "door_sliding", "door_slam", "knock", "tap", "squeak", "chopping_food", "frying_food", "cutlery_silverware", "microwave_oven", "blender", "water_tap_faucet", "hair_dryer", "vaccum_cleaner", "typing", "telephone", "telephone_bell_ringing", "ringtone", "alarm_clock", "siren", "civil_defense_siren", "smoke_detector", "mechanical_fan", "printer", "power_tool", "drill", "gunshot_gunfire", "fireworks", "boom", "glass_clink", "glass_breaking", "liquid_splashing", "liquid_dripping", "liquid_trickle_dribble", "liquid_sloshing", "boiling", "underwater_bubbling", "whoosh_swoosh_swish", "thump_thud", "slap_smack", "crushing", "crumpling_crinkling", "tearing", "beep", "click"]
+                      "clapping", "cheering", "applause", "crowd", "dog", "dog_bark", "dog_howl", "cat", "cat_purr", "cat_meow", "bird", "music", "bell", "bicycle_bell", "chime", "wind_rustling_leaves", "thunder", "water", "rain", "stream_burbling", "waterfall", "fire", "fire_crackle", "car_horn", "emergency_vehicle", "police_siren", "ambulance_siren", "fire_engine_siren", "motorcycle", "subway_metro", "helicopter", "bicycle", "engine", "lawn_mower", "chainsaw", "door", "door_bell", "door_sliding", "door_slam", "knock", "tap", "squeak", "chopping_food", "frying_food", "cutlery_silverware", "microwave_oven", "blender", "water_tap_faucet", "hair_dryer", "vaccum_cleaner", "typing", "telephone", "telephone_bell_ringing", "ringtone", "alarm_clock", "siren", "civil_defense_siren", "smoke_detector", "mechanical_fan", "printer", "power_tool", "drill", "gunshot_gunfire", "fireworks", "boom", "glass_clink", "glass_breaking", "liquid_splashing", "liquid_dripping", "liquid_trickle_dribble", "liquid_sloshing", "boiling", "underwater_bubbling", "whoosh_swoosh_swish", "thump_thud", "slap_smack", "crushing", "crumpling_crinkling", "tearing", "beep", "click"]
         
         let labels = try AudioClassifier.getAllPossibleLabels().filter { experimentalLabels.contains($0) }
         return Set<SoundIdentifier>(labels.map {

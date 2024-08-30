@@ -30,6 +30,8 @@
 		E70A9CA62C71366E005808EA /* FireStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA52C71366E005808EA /* FireStoreManager.swift */; };
 		E70A9CA82C713AD8005808EA /* TaskDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA72C713AD8005808EA /* TaskDetailView.swift */; };
 		E70A9CAA2C72464D005808EA /* TaskControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E70A9CA92C72464D005808EA /* TaskControlView.swift */; };
+		E7766DD72C755DAB006F4967 /* AcousticSceneDescriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7766DD62C755DAB006F4967 /* AcousticSceneDescriber.swift */; };
+		E7766DD92C7573A0006F4967 /* AcousticSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7766DD82C7573A0006F4967 /* AcousticSceneView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +57,9 @@
 		E70A9CA52C71366E005808EA /* FireStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireStoreManager.swift; sourceTree = "<group>"; };
 		E70A9CA72C713AD8005808EA /* TaskDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailView.swift; sourceTree = "<group>"; };
 		E70A9CA92C72464D005808EA /* TaskControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskControlView.swift; sourceTree = "<group>"; };
+		E7766DD62C755DAB006F4967 /* AcousticSceneDescriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcousticSceneDescriber.swift; sourceTree = "<group>"; };
+		E7766DD82C7573A0006F4967 /* AcousticSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcousticSceneView.swift; sourceTree = "<group>"; };
+		E7766DDA2C75752D006F4967 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +94,7 @@
 		E70A9C672C6D4014005808EA /* SoundWeaverServer */ = {
 			isa = PBXGroup;
 			children = (
+				E7766DDA2C75752D006F4967 /* Info.plist */,
 				E70A9C9D2C6E7B6C005808EA /* GoogleService-Info.plist */,
 				E70A9C782C6D4032005808EA /* Server */,
 				E70A9C772C6D4029005808EA /* Helper */,
@@ -114,6 +120,7 @@
 			children = (
 				E70A9C802C6D4160005808EA /* DirectionButton.swift */,
 				E70A9CA12C700226005808EA /* TaskConfigView.swift */,
+				E7766DD82C7573A0006F4967 /* AcousticSceneView.swift */,
 				E70A9CA72C713AD8005808EA /* TaskDetailView.swift */,
 				E70A9C792C6D404D005808EA /* DirectionView.swift */,
 				E70A9CA92C72464D005808EA /* TaskControlView.swift */,
@@ -138,6 +145,7 @@
 			children = (
 				E70A9C862C6D4322005808EA /* AudioSessionManager.swift */,
 				E70A9C882C6D433B005808EA /* SpeechRecognizer.swift */,
+				E7766DD62C755DAB006F4967 /* AcousticSceneDescriber.swift */,
 				E70A9C8A2C6D436A005808EA /* AudioClassifier.swift */,
 				E70A9C8C2C6D4382005808EA /* AudioClassificationManager.swift */,
 				E70A9C9F2C6EA3E8005808EA /* SoundLevelMonitor.swift */,
@@ -226,6 +234,7 @@
 			files = (
 				E70A9C912C6D43C4005808EA /* SoundIdentifier.swift in Sources */,
 				E70A9CA42C712C22005808EA /* ActionModeDataModels.swift in Sources */,
+				E7766DD92C7573A0006F4967 /* AcousticSceneView.swift in Sources */,
 				E70A9CA22C700226005808EA /* TaskConfigView.swift in Sources */,
 				E70A9C892C6D433B005808EA /* SpeechRecognizer.swift in Sources */,
 				E70A9C7A2C6D404D005808EA /* DirectionView.swift in Sources */,
@@ -234,6 +243,7 @@
 				E70A9CAA2C72464D005808EA /* TaskControlView.swift in Sources */,
 				E70A9C812C6D4160005808EA /* DirectionButton.swift in Sources */,
 				E70A9CA02C6EA3E8005808EA /* SoundLevelMonitor.swift in Sources */,
+				E7766DD72C755DAB006F4967 /* AcousticSceneDescriber.swift in Sources */,
 				E70A9C8F2C6D43B7005808EA /* ClassificationResultsObject.swift in Sources */,
 				E70A9C832C6D4277005808EA /* ServerView.swift in Sources */,
 				E70A9C6B2C6D4014005808EA /* ContentView.swift in Sources */,
@@ -378,6 +388,7 @@
 				DEVELOPMENT_TEAM = ST54V5XQY4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoundWeaverServer/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We will need access to the microphone.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We will need to use the speech recognition service.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -409,6 +420,7 @@
 				DEVELOPMENT_TEAM = ST54V5XQY4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoundWeaverServer/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "We will need access to the microphone.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "We will need to use the speech recognition service.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

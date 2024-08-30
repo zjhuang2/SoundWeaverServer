@@ -15,11 +15,13 @@ import FirebaseDatabase
     
     // Set up Firebase Database connection
     private var databaseRef: DatabaseReference!
+    private var realtimeDB = Database.database().reference()
     
     static let shared = SoundLevelMonitor()
-
     private var audioRecorder: AVAudioRecorder?
+    
     private var timer: Timer?
+    private var spikeDetectionTimer: Timer? = nil
     
     var amplitudes: [CGFloat] = Array(repeating: 0.0, count: 100) {
         didSet {
@@ -27,11 +29,15 @@ import FirebaseDatabase
         }
     }
     
-    var suddenSpikeDetected: Bool = false {
-        didSet {
-            uploadSpikeDetectionToServer()
-        }
-    }
+    var avgAmplitude: CGFloat = 0.0
+    
+    var spikeDetected: Bool = false
+    
+//    var suddenSpikeDetected: Bool = false {
+//        didSet {
+//            uploadSpikeDetectionToServer()
+//        }
+//    }
     
     func startMonitoring() {
         
@@ -56,8 +62,35 @@ import FirebaseDatabase
             timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
                 self.updateAmplitudes()
             }
+            
+            // Start observing spikeDetected values on Firebase
+            observeSpikeDetection()
+            
         } catch {
             print("Failed to set up audio recorder: \(error)")
+        }
+    }
+    
+    func observeSpikeDetection() {
+        realtimeDB.child("spikeDetected").observe(.value, with: { snapshot in
+            if let value = snapshot.value as? Bool {
+                self.spikeDetected = value
+            }
+        })
+    }
+    
+    func setSpikeDetectionToTrue() {
+        if spikeDetected {
+            spikeDetectionTimer?.invalidate()
+            spikeDetectionTimer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: false) { _ in
+                self.realtimeDB.child("spikeDetected").setValue(false)
+            }
+        } else {
+            realtimeDB.child("spikeDetected").setValue(true)
+            spikeDetectionTimer?.invalidate()
+            spikeDetectionTimer = Timer.scheduledTimer(withTimeInterval: 6.0, repeats: false) { _ in
+                self.realtimeDB.child("spikeDetected").setValue(false)
+            }
         }
     }
     
@@ -75,30 +108,32 @@ import FirebaseDatabase
                 self.amplitudes.removeFirst()
             }
             
+            self.avgAmplitude = self.average(of: self.amplitudes)
+            
             // watch out for anomalies
             if self.amplitudes.count >= 6 {
                 let lastTenAverage = self.amplitudes.suffix(3).reduce(0, +) / 3.0
                 let previousTenAverage = self.amplitudes.prefix(self.amplitudes.count - 3).suffix(3).reduce(0, +) / 3.0
                 
                 if abs(lastTenAverage - previousTenAverage) > 0.08 {
-                    self.suddenSpikeDetected = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                        self.suddenSpikeDetected = false
-                    }
+                    self.setSpikeDetectionToTrue()
                 }
             }
         }
     }
     
+    private func average(of values: [CGFloat]) -> CGFloat {
+        guard !values.isEmpty else { return 0 } // Handle empty array case
+        let sum = values.reduce(0, +)
+        return sum / CGFloat(values.count)
+    }
+    
     private func uploadLatestAmplitudesToServer() {
         let ref = Database.database().reference()
         ref.child("soundLevel").setValue(["value": amplitudes])
+        ref.child("AverageSoundLevel").setValue(self.avgAmplitude)
     }
     
-    private func uploadSpikeDetectionToServer() {
-        let ref = Database.database().reference()
-        ref.child("spikeDetected").setValue(["value": suddenSpikeDetected])
-    }
     
     func stopMonitoring() {
         audioRecorder?.stop()
